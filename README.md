@@ -1,24 +1,22 @@
-<<<<<<< HEAD
-# Express (frontend) + Flask (backend) with Docker
+Full-Stack Docker App (Express + Flask + MongoDB)
 
+This project is a simple full-stack application demonstrating how to connect an Express frontend, a Flask backend, and MongoDB using Docker Compose.
 
-## Local (non-Docker) quick run
+🚀 Features
 
+Node.js + Express Frontend
+Displays a form and sends user input to the backend.
 
-1. Backend
+Flask Backend API
+Receives data, processes it, and stores it in MongoDB.
 
+MongoDB Database
+Stores form submissions.
 
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python app.py
+Dockerized Architecture
 
-cd frontend
-npm install
-npm start
-# open http://localhost:3000
-=======
-# flash-docker-app
->>>>>>> ff5ff7911c461f1c87c207b9b754277f55fabf97
+Separate containers for frontend, backend, and MongoDB
+
+Shared internal Docker network
+
+Easy one-command startup
