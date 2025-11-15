@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Express → Flask Form Demo</title>
+<style>
+body { font-family: system-ui, Arial; max-width: 720px; margin: 40px auto; }
+label { display:block; margin-top: 12px }
+input, textarea { width: 100%; padding: 8px; box-sizing: border-box }
+button { margin-top: 12px; padding: 10px 18px }
+pre { background:#f7f7f7; padding:12px }
+</style>
+</head>
+<body>
+<h1>Contact form (Express frontend → Flask backend)</h1>
+
+
+<form id="contactForm">
+<label>
+Name
+<input type="text" name="name" id="name" required />
+</label>
+
+
+<label>
+Email
+<input type="email" name="email" id="email" required />
+</label>
+
+
+<label>
+Message
+<textarea name="message" id="message" rows="5" required></textarea>
+</label>
+
+
+<button type="submit">Send to Flask backend</button>
+</form>
+
+
+<h2>Response</h2>
+<pre id="response">(no response yet)</pre>
+
+
+<script>
+// Edit this to point to the backend. When running with docker-compose the
+// backend service name is `backend` (see docker-compose.yml). If you open
+// the frontend in dev on your machine against a local Flask server, use http://localhost:5000
+const BACKEND_URL = window.BACKEND_URL || (location.hostname === 'localhost' ? 'http://localhost:5000' : 'http://backend:5000');
+
+
+const form = document.getElementById('contactForm');
+const responseEl = document.getElementById('response');
+
+
+form.addEventListener('submit', async (e) => {
+</html>
