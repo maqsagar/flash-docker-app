@@ -1,23 +1,28 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from pymongo import MongoClient
+import os
 
 
 app = Flask(__name__)
-CORS(app) # allow cross-origin requests (for development and docker-compose)
+CORS(app)
+
+
+# MongoDB connection (use environment variable MONGO_URI)
+mongo_uri = os.environ.get('MONGO_URI', 'mongodb://mongo:27017/')
+client = MongoClient(mongo_uri)
+db = client['formdb']
+collection = db['submissions']
 
 
 @app.route('/', methods=['GET'])
 def health():
-return jsonify({'status': 'ok', 'service': 'flask-backend'})
+return jsonify({'status': 'ok', 'service': 'flask-backend', 'db': 'connected'})
 
 
 @app.route('/submit', methods=['POST'])
 def submit():
-# Accept JSON body with keys: name, email, message
-try:
 data = request.get_json(force=True)
-except Exception:
-return jsonify({'ok': False, 'error': 'Invalid JSON body'}), 400
 
 
 name = data.get('name')
@@ -25,27 +30,19 @@ email = data.get('email')
 message = data.get('message')
 
 
-# Simple validation
-if not name or not email or not message:
-return jsonify({'ok': False, 'error': 'name, email and message are required'}), 400
+if not all([name, email, message]):
+return jsonify({'ok': False, 'error': 'Missing fields'}), 400
 
 
-# Process data here (e.g., save to DB, send email...).
-# For demo, we'll just return a confirmation with the same data.
-result = {
-'ok': True,
-'received': {
+doc_id = collection.insert_one({
 'name': name,
 'email': email,
 'message': message
-},
-'note': 'Processed by Flask backend'
-}
+}).inserted_id
 
 
-return jsonify(result), 200
+return jsonify({'ok': True, 'inserted_id': str(doc_id)})
 
 
 if __name__ == '__main__':
-# When running inside Docker in compose, host 0.0.0.0 is required
 app.run(host='0.0.0.0', port=5000)

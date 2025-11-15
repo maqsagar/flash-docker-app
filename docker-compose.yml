@@ -1,25 +1,25 @@
-version: '3.8'
-services:
-frontend:
-build: ./frontend
-container_name: express_frontend
+mongo:
+image: mongo:6
+container_name: mongo_db
 ports:
-- "3000:3000"
-depends_on:
-- backend
+- "27017:27017"
+volumes:
+- mongo_data:/data/db
 networks:
 - appnet
 
 
 backend:
 build: ./backend
-container_name: flask_backend
+environment:
+- MONGO_URI=mongodb://mongo:27017/
 ports:
 - "5000:5000"
+depends_on:
+- mongo
 networks:
 - appnet
 
 
-networks:
-appnet:
-driver: bridge
+volumes:
+mongo_data:
