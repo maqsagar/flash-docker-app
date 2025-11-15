@@ -8,41 +8,33 @@ app = Flask(__name__)
 CORS(app)
 
 
-# MongoDB connection (use environment variable MONGO_URI)
-mongo_uri = os.environ.get('MONGO_URI', 'mongodb://mongo:27017/')
-client = MongoClient(mongo_uri)
+MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://mongo:27017/')
+client = MongoClient(MONGO_URI)
 db = client['formdb']
 collection = db['submissions']
 
 
-@app.route('/', methods=['GET'])
-def health():
-return jsonify({'status': 'ok', 'service': 'flask-backend', 'db': 'connected'})
-
-
 @app.route('/submit', methods=['POST'])
 def submit():
-data = request.get_json(force=True)
+data = request.get_json()
+if not data:
+return jsonify({"error": "No data received"}), 400
 
 
-name = data.get('name')
-email = data.get('email')
-message = data.get('message')
+insert_result = collection.insert_one(data)
 
 
-if not all([name, email, message]):
-return jsonify({'ok': False, 'error': 'Missing fields'}), 400
+return jsonify({
+"status": "success",
+"inserted_id": str(insert_result.inserted_id)
+})
 
 
-doc_id = collection.insert_one({
-'name': name,
-'email': email,
-'message': message
-}).inserted_id
-
-
-return jsonify({'ok': True, 'inserted_id': str(doc_id)})
+@app.route('/')
+def home():
+return {"message": "Flask backend running"}
 
 
 if __name__ == '__main__':
 app.run(host='0.0.0.0', port=5000)
+

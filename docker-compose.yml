@@ -1,25 +1,38 @@
-mongo:
-image: mongo:6
-container_name: mongo_db
-ports:
-- "27017:27017"
+version: "3.9"
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - appnet
+
+  backend:
+    build: ./backend
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    networks:
+      - appnet
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - appnet
+
 volumes:
-- mongo_data:/data/db
+  mongo_data:
+
 networks:
-- appnet
-
-
-backend:
-build: ./backend
-environment:
-- MONGO_URI=mongodb://mongo:27017/
-ports:
-- "5000:5000"
-depends_on:
-- mongo
-networks:
-- appnet
-
-
-volumes:
-mongo_data:
+  appnet:
+    driver: bridge

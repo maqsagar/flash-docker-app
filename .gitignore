@@ -1,26 +1,5 @@
-# Node
-frontend/node_modules/
-
-
-# Python
-backend/__pycache__/
-*.pyc
-
-
-# Editor / OS
+node_modules/
+__pycache__/
 .vscode/
-.DS_Store
-
-
-# Env
 .env
-
-
-# Logs
-logs/
-*.log
-
-
-# build artifacts
-dist/
-build/
+.DS_Store
