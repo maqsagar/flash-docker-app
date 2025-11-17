@@ -16,25 +16,23 @@ collection = db['submissions']
 
 @app.route('/submit', methods=['POST'])
 def submit():
-data = request.get_json()
-if not data:
-return jsonify({"error": "No data received"}), 400
+	data = request.get_json()
+	if not data:
+		return jsonify({"error": "No data received"}), 400
 
+	insert_result = collection.insert_one(data)
 
-insert_result = collection.insert_one(data)
-
-
-return jsonify({
-"status": "success",
-"inserted_id": str(insert_result.inserted_id)
-})
+	return jsonify({
+		"status": "success",
+		"inserted_id": str(insert_result.inserted_id)
+	})
 
 
 @app.route('/')
 def home():
-return {"message": "Flask backend running"}
+	return {"message": "Flask backend running"}
 
 
 if __name__ == '__main__':
-app.run(host='0.0.0.0', port=5000)
+	app.run(host='0.0.0.0', port=5000)
 
