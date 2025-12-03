@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   frontend:
     build: ./frontend
@@ -18,20 +20,6 @@ services:
       - mongo
     networks:
       - appnet
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx-proxy
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - backend
-      - frontend
-    networks:
-      - appnet
-
   mongo:
     image: mongo:6
     ports:
