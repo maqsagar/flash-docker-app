@@ -20,7 +20,8 @@ Separate containers for frontend, backend, and MongoDB
 Shared internal Docker network
 
 Easy one-command startup
-
+ 
+Backend Run 
 python3 -m venv venv
 source venv/bin/activate
 pip install flask
