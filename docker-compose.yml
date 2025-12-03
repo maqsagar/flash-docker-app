@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   frontend:
     build: ./frontend
@@ -21,16 +19,7 @@ services:
     networks:
       - appnet
 
-  mongo:
-    image: mongo:6
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - appnet
-
-    nginx:
+  nginx:
     image: nginx:latest
     container_name: nginx-proxy
     ports:
@@ -40,9 +29,21 @@ services:
     depends_on:
       - backend
       - frontend
+    networks:
+      - appnet
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - appnet
 
 volumes:
   mongo_data:
+
 
 networks:
   appnet:
